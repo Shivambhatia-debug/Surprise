@@ -9,13 +9,34 @@ export default function Home() {
 
   return (
     <main style={{ width: '100%', height: '100%', position: 'relative' }}>
-      {/* Background Audio */}
-      {/* Note: Autoplay requires user interaction, so we wait for them to click "Start" */}
+      {/* Spotify Embed - Floating at the bottom right corner */}
       {started && (
-        <audio autoPlay loop>
-          {/* Placeholder for a romantic track - user can replace this file later */}
-          <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3?filename=beautiful-and-emotional-romantic-piano-100806.mp3" type="audio/mpeg" />
-        </audio>
+        <div style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: '20px',
+          zIndex: 1000,
+          opacity: 0.8,
+          transition: 'opacity 0.3s ease',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+          borderRadius: '12px',
+          overflow: 'hidden'
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+        onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}
+        >
+          {/* Replace this URL with your specific Spotify track or playlist embed URL */}
+          <iframe 
+            style={{ borderRadius: '12px' }} 
+            src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO?utm_source=generator&theme=0" 
+            width="300" 
+            height="80" 
+            frameBorder="0" 
+            allowFullScreen={false} 
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+            loading="lazy"
+          ></iframe>
+        </div>
       )}
 
       {!started ? (
