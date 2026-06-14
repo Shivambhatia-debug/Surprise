@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&display=swap');
+
+.finaleContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 50;
+  overflow-y: auto;
+}
+
+.goldenGift {
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.1));
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.4), 0 0 80px rgba(255, 215, 0, 0.2);
+}
+
+.envelopeInstruction {
+  margin-top: 30px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+  animation: pulseText 2s infinite;
+}
+
+.letterContainer {
+  width: 90vw;
+  max-width: 550px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2), 0 0 30px rgba(255, 105, 180, 0.2);
+  text-align: left;
+  z-index: 20;
+}
+
+.letterText {
+  font-family: 'Caveat', cursive;
+  font-size: 1.7rem;
+  line-height: 1.5;
+  color: #333;
+}
+
+.title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  text-shadow: 0 0 20px var(--pink-glow), 0 0 50px var(--pink-glow);
+  animation: floatTitle 4s ease-in-out infinite;
+}
+
+.nameTitle {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #ffd700;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.4);
+  font-family: 'Caveat', cursive;
+}
+
+@keyframes floatTitle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes pulseText {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  .title { font-size: 2.5rem; }
+  .nameTitle { font-size: 3rem; }
+  .letterText { font-size: 1.4rem; }
+}
+
+@media (max-width: 480px) {
+  .title { font-size: 2rem; letter-spacing: 2px; }
+  .nameTitle { font-size: 2.5rem; }
+  .letterContainer { padding: 20px; }
+  .letterText { font-size: 1.3rem; }
+  .goldenGift { width: 100px; height: 100px; }
+}
