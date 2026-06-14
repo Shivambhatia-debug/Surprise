@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { Heart, Gift, Download } from 'lucide-react';
@@ -9,6 +9,7 @@ export default function Finale() {
   const [step, setStep] = useState<'gift' | 'darkRoom' | 'cake' | 'scooty'>('gift');
   const [typedText, setTypedText] = useState('');
   const [stars, setStars] = useState<{ id: number, x: number, y: number, size: number, delay: number }[]>([]);
+  const textContainerRef = useRef<HTMLDivElement>(null);
 
   const loveLetterText = `Dear Chululu,
 
@@ -138,6 +139,12 @@ Forever yours.`;
     }
   }, [step, loveLetterText]);
 
+  useEffect(() => {
+    if (textContainerRef.current) {
+      textContainerRef.current.scrollTop = textContainerRef.current.scrollHeight;
+    }
+  }, [typedText]);
+
   return (
     <div className={styles.finaleContainer}>
       <AnimatePresence mode="wait">
@@ -241,42 +248,80 @@ Forever yours.`;
                 ))}
               </div>
               <div className={styles.moon} />
+              
+              {/* Shooting Star */}
+              <div className={styles.shootingStar} style={{ top: '30%', animationDelay: '2s' }} />
+              <div className={styles.shootingStar} style={{ top: '10%', animationDelay: '5s' }} />
+              
+              {/* Cityscape Parallax */}
+              <div className={styles.cityscape} />
+              
               <div className={styles.road} />
+              
+              {/* Passing Streetlights */}
+              <div className={styles.streetlight} style={{ animationDelay: '0s' }} />
+              <div className={styles.streetlight} style={{ animationDelay: '1.5s' }} />
             </div>
 
             {/* Scooty Animation */}
             <div className={styles.scootyContainer}>
-              {/* Cute SVG Scooty with two people */}
-              <svg width="180" height="120" viewBox="0 0 100 60">
+              <svg width="220" height="150" viewBox="0 0 140 80">
                 {/* Wheels */}
-                <circle cx="20" cy="50" r="8" fill="#333" />
-                <circle cx="80" cy="50" r="8" fill="#333" />
-                <circle cx="20" cy="50" r="4" fill="#ccc" />
-                <circle cx="80" cy="50" r="4" fill="#ccc" />
-                {/* Body */}
-                <path d="M 15 40 L 85 40 L 75 25 L 25 25 Z" fill="#ff1493" />
-                <path d="M 10 45 L 90 45 L 85 40 L 15 40 Z" fill="#ff69b4" />
-                {/* Handle */}
-                <line x1="75" y1="25" x2="80" y2="15" stroke="#333" strokeWidth="2" />
-                <circle cx="80" cy="15" r="3" fill="#333" />
+                <circle cx="30" cy="65" r="14" fill="#111" />
+                <circle cx="30" cy="65" r="8" fill="#555" />
+                <circle cx="30" cy="65" r="4" fill="#ccc" />
+                
+                <circle cx="110" cy="65" r="14" fill="#111" />
+                <circle cx="110" cy="65" r="8" fill="#555" />
+                <circle cx="110" cy="65" r="4" fill="#ccc" />
+                
+                {/* Motorcycle Frame & Body */}
+                {/* Exhaust */}
+                <path d="M 30 65 L 70 65 L 75 60 L 40 60 Z" fill="#666" />
+                {/* Engine Area */}
+                <rect x="60" y="45" width="25" height="15" rx="3" fill="#333" />
+                <rect x="62" y="47" width="21" height="11" rx="2" fill="#222" />
+                {/* Chassis/Body */}
+                <path d="M 30 50 C 45 40, 60 35, 80 35 C 95 35, 105 45, 110 65 L 105 55 C 95 40, 80 40, 60 45 L 30 50 Z" fill="#111" />
+                {/* Fuel Tank (Cool dark blue/black) */}
+                <path d="M 60 35 C 70 25, 90 25, 95 35 C 95 40, 80 45, 60 45 Z" fill="#1a365d" />
+                {/* Front Fork */}
+                <line x1="110" y1="65" x2="95" y2="20" stroke="#888" strokeWidth="4" strokeLinecap="round" />
+                {/* Seat */}
+                <path d="M 35 35 L 65 35 L 65 30 L 35 30 Z" fill="#222" />
+
+                {/* Handlebar */}
+                <line x1="95" y1="20" x2="85" y2="10" stroke="#111" strokeWidth="4" strokeLinecap="round" />
+
                 {/* Headlight */}
-                <circle cx="90" cy="40" r="3" fill="#ffd700" />
-                <polygon points="90,38 100,35 100,45 90,42" fill="rgba(255,215,0,0.5)" />
-                {/* People (Abstract) */}
-                {/* Rider */}
-                <circle cx="65" cy="15" r="5" fill="#111" />
-                <line x1="65" y1="20" x2="65" y2="30" stroke="#111" strokeWidth="4" />
+                <circle cx="102" cy="25" r="5" fill="#ffd700" />
+                <polygon points="107,25 125,15 125,35 107,25" fill="rgba(255,215,0,0.4)" />
+
+                {/* Rider (Boy) */}
+                <circle cx="65" cy="10" r="6" fill="#111" />
+                <path d="M 65 16 C 70 25, 75 30, 65 35" fill="none" stroke="#111" strokeWidth="6" strokeLinecap="round" />
+                {/* Arm reaching for handle */}
+                <line x1="68" y1="20" x2="85" y2="10" stroke="#111" strokeWidth="5" strokeLinecap="round" />
+                {/* Leg */}
+                <line x1="65" y1="35" x2="68" y2="50" stroke="#111" strokeWidth="6" strokeLinecap="round" />
+                <line x1="68" y1="50" x2="80" y2="50" stroke="#111" strokeWidth="5" strokeLinecap="round" />
+
                 {/* Pillion (Chululu) */}
-                <circle cx="45" cy="16" r="4.5" fill="#fff" />
-                <line x1="45" y1="21" x2="45" y2="30" stroke="#ffb6c1" strokeWidth="4" />
-                {/* Hearts floating behind */}
-                <text x="30" y="15" fontSize="8" fill="#ff1493">♥</text>
-                <text x="20" y="10" fontSize="6" fill="#ff69b4">♥</text>
+                <circle cx="45" cy="12" r="5.5" fill="#fff" />
+                <line x1="45" y1="18" x2="45" y2="35" stroke="#ffb6c1" strokeWidth="5" strokeLinecap="round" />
+                {/* Arm holding rider */}
+                <line x1="45" y1="22" x2="65" y2="22" stroke="#ffb6c1" strokeWidth="4" strokeLinecap="round" />
+                {/* Leg */}
+                <line x1="45" y1="35" x2="50" y2="50" stroke="#ffb6c1" strokeWidth="5" strokeLinecap="round" />
+
+                {/* Floating hearts behind */}
+                <text x="15" y="25" fontSize="12" fill="#ff1493">♥</text>
+                <text x="5" y="15" fontSize="8" fill="#ff69b4">♥</text>
               </svg>
             </div>
 
             {/* Floating Letter */}
-            <div className={styles.floatingLetterContainer}>
+            <div className={styles.floatingLetterContainer} ref={textContainerRef}>
               <div className={styles.floatingText}>
                 {typedText.split('\n').map((line, i) => (
                   <span key={i}>
