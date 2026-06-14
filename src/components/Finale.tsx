@@ -231,11 +231,11 @@ Forever yours.`;
                     key={star.id} 
                     className={styles.star} 
                     style={{ 
-                      left: \`\${star.x}%\`, 
-                      top: \`\${star.y}%\`, 
+                      left: `${star.x}%`, 
+                      top: `${star.y}%`, 
                       width: star.size, 
                       height: star.size,
-                      animationDelay: \`\${star.delay}s\`
+                      animationDelay: `${star.delay}s`
                     }} 
                   />
                 ))}
