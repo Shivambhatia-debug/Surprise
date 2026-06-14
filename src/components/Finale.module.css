@@ -13,6 +13,7 @@
   text-align: center;
   z-index: 50;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .goldenGift {
@@ -85,10 +86,180 @@
   50% { opacity: 1; }
 }
 
+/* ========================================= */
+/* NEW FINALE PHASES CSS                     */
+/* ========================================= */
+
+.darkRoom {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #000;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightSwitch {
+  width: 60px;
+  height: 100px;
+  background: #333;
+  border-radius: 10px;
+  border: 4px solid #555;
+  position: relative;
+  cursor: pointer;
+  box-shadow: inset 0 0 10px #000, 0 0 15px rgba(255,255,255,0.2);
+}
+.lightSwitch::after {
+  content: '';
+  position: absolute;
+  top: 10px; left: 10px; right: 10px; height: 35px;
+  background: #ff1493;
+  border-radius: 5px;
+  box-shadow: 0 0 10px #ff1493;
+  transition: top 0.2s;
+}
+
+.cakeContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cake {
+  width: 150px;
+  height: 80px;
+  background: #ff69b4;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+  box-shadow: inset 0 -10px 0 rgba(0,0,0,0.1);
+  border-bottom: 5px solid #fff;
+}
+.cake::before {
+  content: '';
+  position: absolute;
+  top: -20px; left: 0; width: 100%; height: 20px;
+  background: #ffd700;
+  border-radius: 10px 10px 0 0;
+}
+
+.candle {
+  width: 12px;
+  height: 40px;
+  background: #fff;
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 3px;
+  background-image: repeating-linear-gradient(45deg, #fff, #fff 5px, #ff1493 5px, #ff1493 10px);
+}
+
+.flame {
+  width: 16px;
+  height: 25px;
+  background: #ff9d00;
+  border-radius: 50% 50% 20% 20%;
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 20px #ff9d00, 0 0 40px #ff9d00, 0 0 60px #ff0000;
+  animation: flicker 0.1s infinite alternate;
+  cursor: pointer;
+}
+
+@keyframes flicker {
+  0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+  100% { transform: translateX(-50%) scale(1.1) rotate(2deg); opacity: 1; }
+}
+
+.starryNight {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to bottom, #0a0a2a, #1a1a4a);
+  z-index: 0;
+  overflow: hidden;
+}
+
+.moon {
+  width: 120px;
+  height: 120px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 10vh;
+  right: 10vw;
+  box-shadow: 0 0 50px #fff, 0 0 100px #ffd700;
+}
+
+.road {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 20vh;
+  background: #111;
+  border-top: 2px solid #333;
+}
+
+.scootyContainer {
+  position: absolute;
+  bottom: 18vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  animation: drive 10s linear infinite, bounce 0.5s infinite alternate;
+}
+
+@keyframes drive {
+  0% { left: -10vw; }
+  100% { left: 110vw; }
+}
+@keyframes bounce {
+  0% { transform: translateX(-50%) translateY(0); }
+  100% { transform: translateX(-50%) translateY(-5px); }
+}
+
+.starsContainer {
+  width: 100%; height: 100%; position: absolute;
+}
+.star {
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  animation: twinkle 2s infinite alternate;
+}
+@keyframes twinkle {
+  0% { opacity: 0.2; }
+  100% { opacity: 1; box-shadow: 0 0 10px #fff; }
+}
+
+.floatingLetterContainer {
+  position: absolute;
+  top: 15vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90vw;
+  max-width: 600px;
+  color: #fff;
+  text-align: center;
+  z-index: 20;
+  text-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+
+.floatingText {
+  font-family: 'Caveat', cursive;
+  font-size: 2rem;
+  line-height: 1.6;
+}
+
 @media (max-width: 768px) {
   .title { font-size: 2.5rem; }
   .nameTitle { font-size: 3rem; }
   .letterText { font-size: 1.4rem; }
+  .floatingText { font-size: 1.6rem; }
 }
 
 @media (max-width: 480px) {
@@ -97,4 +268,6 @@
   .letterContainer { padding: 20px; }
   .letterText { font-size: 1.3rem; }
   .goldenGift { width: 100px; height: 100px; }
+  .floatingText { font-size: 1.4rem; }
+  .scootyContainer svg { width: 120px; }
 }

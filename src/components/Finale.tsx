@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { Heart, Gift, Download } from 'lucide-react';
+import { playTick, playPop, playShimmer, vibrate } from '@/utils/interactions';
 import styles from './Finale.module.css';
 
 export default function Finale() {
-  const [step, setStep] = useState<'gift' | 'letter' | 'finale'>('gift');
+  const [step, setStep] = useState<'gift' | 'darkRoom' | 'cake' | 'scooty'>('gift');
   const [typedText, setTypedText] = useState('');
+  const [stars, setStars] = useState<{ id: number, x: number, y: number, size: number, delay: number }[]>([]);
 
   const loveLetterText = `Dear Chululu,
 
@@ -26,6 +28,18 @@ Happy Birthday, Chululu. You mean more to me than words on any screen could ever
 
 Forever yours.`;
 
+  useEffect(() => {
+    // Generate stars for the night sky
+    const generatedStars = Array.from({ length: 50 }).map((_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 60, // Top 60% of screen
+      size: Math.random() * 3 + 1,
+      delay: Math.random() * 2
+    }));
+    setStars(generatedStars);
+  }, []);
+
   const downloadKeepsake = () => {
     const canvas = document.createElement('canvas');
     canvas.width = 1080;
@@ -33,14 +47,12 @@ Forever yours.`;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Background gradient
     const gradient = ctx.createLinearGradient(0, 0, 0, 1920);
     gradient.addColorStop(0, '#ff9a9e');
     gradient.addColorStop(1, '#fecfef');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 1080, 1920);
 
-    // Decorative Border
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
     ctx.lineWidth = 15;
     ctx.strokeRect(50, 50, 980, 1820);
@@ -50,11 +62,9 @@ Forever yours.`;
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
     
-    // Title
     ctx.font = 'bold 90px "Outfit", sans-serif';
     ctx.fillText('My Promises To You', 540, 400);
     
-    // Subtitle
     ctx.font = 'italic 70px "Caveat", cursive';
     ctx.fillStyle = '#ff1493';
     ctx.fillText('Chululu, my safe space ✨', 540, 500);
@@ -89,66 +99,50 @@ Forever yours.`;
   };
 
   const handleOpenGift = () => {
+    vibrate(40);
+    playPop();
+    setStep('darkRoom');
+  };
+
+  const handleLightSwitch = () => {
+    vibrate(100);
+    playTick();
+    setStep('cake');
+  };
+
+  const handleBlowCandle = () => {
+    vibrate([50, 50, 100]);
+    playShimmer();
     confetti({
-      particleCount: 100,
-      spread: 100,
-      origin: { y: 0.5 },
+      particleCount: 150,
+      spread: 120,
+      origin: { y: 0.6 },
       colors: ['#ffd700', '#ff1493', '#ff69b4', '#fff'],
     });
-    setStep('letter');
+    setTimeout(() => {
+      setStep('scooty');
+    }, 2500);
   };
 
   useEffect(() => {
-    if (step === 'letter') {
+    if (step === 'scooty') {
       let index = 0;
       const interval = setInterval(() => {
         setTypedText(loveLetterText.substring(0, index + 1));
         index++;
         if (index === loveLetterText.length) {
           clearInterval(interval);
-          setTimeout(() => setStep('finale'), 5000);
         }
-      }, 40);
+      }, 50); // Slightly slower for the romantic ride
       return () => clearInterval(interval);
     }
   }, [step, loveLetterText]);
 
-  useEffect(() => {
-    if (step === 'finale') {
-      const duration = 20 * 1000;
-      const animationEnd = Date.now() + duration;
-      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
-
-      function randomInRange(min: number, max: number) {
-        return Math.random() * (max - min) + min;
-      }
-
-      const interval = setInterval(function () {
-        const timeLeft = animationEnd - Date.now();
-        if (timeLeft <= 0) return clearInterval(interval);
-
-        const particleCount = 50 * (timeLeft / duration);
-        confetti({
-          ...defaults,
-          particleCount,
-          colors: ['#ff1493', '#ff69b4', '#ffd700', '#fff'],
-          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-        });
-        confetti({
-          ...defaults,
-          particleCount,
-          colors: ['#ff1493', '#ff69b4', '#ffd700', '#fff'],
-          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-        });
-      }, 250);
-
-      return () => clearInterval(interval);
-    }
-  }, [step]);
-
   return (
     <div className={styles.finaleContainer}>
       <AnimatePresence mode="wait">
+        
+        {/* PHASE 1: THE GIFT */}
         {step === 'gift' && (
           <motion.div
             key="gift"
@@ -170,83 +164,171 @@ Forever yours.`;
           </motion.div>
         )}
 
-        {step === 'letter' && (
+        {/* PHASE 2: DARK ROOM */}
+        {step === 'darkRoom' && (
           <motion.div
-            key="letter"
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8 }}
+            key="darkRoom"
+            className={styles.darkRoom}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 1 }}
-            className={styles.letterContainer}
           >
-            <div className={styles.letterText}>
-              {typedText.split('\n').map((line, i) => (
-                <span key={i}>
-                  {line}
-                  <br />
-                </span>
-              ))}
-              <motion.span
-                animate={{ opacity: [1, 0] }}
-                transition={{ duration: 0.5, repeat: Infinity }}
-                style={{ color: 'var(--pink-glow)' }}
-              >
-                |
-              </motion.span>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px' }}>
+              <p style={{ color: '#fff', fontSize: '1.5rem', fontFamily: 'Caveat', letterSpacing: '2px' }}>
+                It's a little dark in here...
+              </p>
+              <motion.div 
+                className={styles.lightSwitch} 
+                onClick={handleLightSwitch}
+                whileTap={{ scale: 0.9 }}
+              />
+              <p style={{ color: '#888', fontSize: '1rem', marginTop: '10px' }}>Tap to turn on the lights</p>
             </div>
           </motion.div>
         )}
 
-        {step === 'finale' && (
+        {/* PHASE 3: THE VIRTUAL CAKE */}
+        {step === 'cake' && (
           <motion.div
-            key="finale"
-            initial={{ opacity: 0, scale: 0.5 }}
+            key="cake"
+            initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 2, ease: "easeOut" }}
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}
+            exit={{ opacity: 0, scale: 1.2 }}
+            transition={{ duration: 0.8 }}
+            className={styles.cakeContainer}
           >
-            <h1 className={styles.title}>Happy 22nd Birthday</h1>
-            <motion.div
-              className={styles.nameTitle}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 1.5 }}
-            >
-              Chululu! 💖
-            </motion.div>
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
+            <h1 className={styles.title} style={{ marginBottom: '60px' }}>Happy 22nd!</h1>
+            <div className={styles.cake}>
+              <div className={styles.candle}>
+                <div className={styles.flame} onClick={handleBlowCandle} />
+              </div>
+            </div>
+            <motion.p 
+              animate={{ opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 2, repeat: Infinity }}
+              style={{ color: '#fff', marginTop: '40px', fontSize: '1.2rem', fontWeight: 600 }}
             >
-              <Heart size={60} color="#ff1493" fill="#ff1493" />
-            </motion.div>
+              Make a wish and tap the flame to blow it... 💨
+            </motion.p>
+          </motion.div>
+        )}
+
+        {/* PHASE 4: THE DREAM RIDE */}
+        {step === 'scooty' && (
+          <motion.div
+            key="scooty"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 2 }}
+            style={{ width: '100%', height: '100%' }}
+          >
+            {/* Night Sky Background */}
+            <div className={styles.starryNight}>
+              <div className={styles.starsContainer}>
+                {stars.map(star => (
+                  <div 
+                    key={star.id} 
+                    className={styles.star} 
+                    style={{ 
+                      left: \`\${star.x}%\`, 
+                      top: \`\${star.y}%\`, 
+                      width: star.size, 
+                      height: star.size,
+                      animationDelay: \`\${star.delay}s\`
+                    }} 
+                  />
+                ))}
+              </div>
+              <div className={styles.moon} />
+              <div className={styles.road} />
+            </div>
+
+            {/* Scooty Animation */}
+            <div className={styles.scootyContainer}>
+              {/* Cute SVG Scooty with two people */}
+              <svg width="180" height="120" viewBox="0 0 100 60">
+                {/* Wheels */}
+                <circle cx="20" cy="50" r="8" fill="#333" />
+                <circle cx="80" cy="50" r="8" fill="#333" />
+                <circle cx="20" cy="50" r="4" fill="#ccc" />
+                <circle cx="80" cy="50" r="4" fill="#ccc" />
+                {/* Body */}
+                <path d="M 15 40 L 85 40 L 75 25 L 25 25 Z" fill="#ff1493" />
+                <path d="M 10 45 L 90 45 L 85 40 L 15 40 Z" fill="#ff69b4" />
+                {/* Handle */}
+                <line x1="75" y1="25" x2="80" y2="15" stroke="#333" strokeWidth="2" />
+                <circle cx="80" cy="15" r="3" fill="#333" />
+                {/* Headlight */}
+                <circle cx="90" cy="40" r="3" fill="#ffd700" />
+                <polygon points="90,38 100,35 100,45 90,42" fill="rgba(255,215,0,0.5)" />
+                {/* People (Abstract) */}
+                {/* Rider */}
+                <circle cx="65" cy="15" r="5" fill="#111" />
+                <line x1="65" y1="20" x2="65" y2="30" stroke="#111" strokeWidth="4" />
+                {/* Pillion (Chululu) */}
+                <circle cx="45" cy="16" r="4.5" fill="#fff" />
+                <line x1="45" y1="21" x2="45" y2="30" stroke="#ffb6c1" strokeWidth="4" />
+                {/* Hearts floating behind */}
+                <text x="30" y="15" fontSize="8" fill="#ff1493">♥</text>
+                <text x="20" y="10" fontSize="6" fill="#ff69b4">♥</text>
+              </svg>
+            </div>
+
+            {/* Floating Letter */}
+            <div className={styles.floatingLetterContainer}>
+              <div className={styles.floatingText}>
+                {typedText.split('\n').map((line, i) => (
+                  <span key={i}>
+                    {line}
+                    <br />
+                  </span>
+                ))}
+                {typedText.length < loveLetterText.length && (
+                  <motion.span
+                    animate={{ opacity: [1, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity }}
+                    style={{ color: 'var(--pink-glow)' }}
+                  >
+                    |
+                  </motion.span>
+                )}
+              </div>
+
+              {typedText.length === loveLetterText.length && (
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1, duration: 1 }}
+                  style={{ display: 'flex', justifyContent: 'center' }}
+                >
+                  <motion.button
+                    onClick={downloadKeepsake}
+                    whileTap={{ scale: 0.95 }}
+                    style={{
+                      marginTop: 40,
+                      padding: '15px 40px',
+                      background: 'rgba(255, 255, 255, 0.15)',
+                      border: '2px solid rgba(255, 255, 255, 0.5)',
+                      borderRadius: 40,
+                      color: '#fff',
+                      fontSize: '1.2rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      backdropFilter: 'blur(5px)',
+                      boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)'
+                    }}
+                  >
+                    <Download size={24} />
+                    Keep This Forever 📥
+                  </motion.button>
+                </motion.div>
+              )}
+            </div>
             
-            <motion.button
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 3, duration: 1 }}
-              onClick={downloadKeepsake}
-              whileTap={{ scale: 0.95 }}
-              style={{
-                marginTop: 40,
-                padding: '15px 40px',
-                background: 'rgba(255, 255, 255, 0.25)',
-                border: '2px solid rgba(255, 255, 255, 0.5)',
-                borderRadius: 40,
-                color: '#fff',
-                fontSize: '1.2rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                backdropFilter: 'blur(10px)',
-                boxShadow: '0 10px 30px rgba(255, 105, 180, 0.3)'
-              }}
-            >
-              <Download size={24} />
-              Keep This Forever 📥
-            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
