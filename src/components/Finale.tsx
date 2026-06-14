@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Heart, Gift } from 'lucide-react';
+import { Heart, Gift, Download } from 'lucide-react';
 import styles from './Finale.module.css';
 
 export default function Finale() {
@@ -25,6 +25,68 @@ Here's to 22, and to taking life one beautiful, calm breath at a time.
 Happy Birthday, Chululu. You mean more to me than words on any screen could ever say. ✨
 
 Forever yours.`;
+
+  const downloadKeepsake = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1080;
+    canvas.height = 1920;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Background gradient
+    const gradient = ctx.createLinearGradient(0, 0, 0, 1920);
+    gradient.addColorStop(0, '#ff9a9e');
+    gradient.addColorStop(1, '#fecfef');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 1080, 1920);
+
+    // Decorative Border
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.lineWidth = 15;
+    ctx.strokeRect(50, 50, 980, 1820);
+    ctx.lineWidth = 4;
+    ctx.strokeRect(70, 70, 940, 1780);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    
+    // Title
+    ctx.font = 'bold 90px "Outfit", sans-serif';
+    ctx.fillText('My Promises To You', 540, 400);
+    
+    // Subtitle
+    ctx.font = 'italic 70px "Caveat", cursive';
+    ctx.fillStyle = '#ff1493';
+    ctx.fillText('Chululu, my safe space ✨', 540, 500);
+
+    ctx.fillStyle = '#ffffff';
+    const promises = [
+      "I promise to be your calm",
+      "when your mind is too loud.",
+      "",
+      "I promise to hold your hand",
+      "when you're overwhelmed.",
+      "",
+      "I promise to always remind you",
+      "to breathe and let go.",
+      "",
+      "You are safe. You are cherished.",
+      "You are enough."
+    ];
+
+    ctx.font = '50px "Outfit", sans-serif';
+    promises.forEach((p, i) => {
+      ctx.fillText(p, 540, 750 + i * 70);
+    });
+
+    ctx.font = 'bold 60px "Outfit", sans-serif';
+    ctx.fillText('Happy 22nd Birthday ❤️', 540, 1650);
+
+    const link = document.createElement('a');
+    link.download = 'For_Chululu_Forever.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  };
 
   const handleOpenGift = () => {
     confetti({
@@ -158,6 +220,33 @@ Forever yours.`;
             >
               <Heart size={60} color="#ff1493" fill="#ff1493" />
             </motion.div>
+            
+            <motion.button
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 3, duration: 1 }}
+              onClick={downloadKeepsake}
+              whileTap={{ scale: 0.95 }}
+              style={{
+                marginTop: 40,
+                padding: '15px 40px',
+                background: 'rgba(255, 255, 255, 0.25)',
+                border: '2px solid rgba(255, 255, 255, 0.5)',
+                borderRadius: 40,
+                color: '#fff',
+                fontSize: '1.2rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 10px 30px rgba(255, 105, 180, 0.3)'
+              }}
+            >
+              <Download size={24} />
+              Keep This Forever 📥
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
