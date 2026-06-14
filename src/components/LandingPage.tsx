@@ -14,9 +14,12 @@ export default function LandingPage({ onStart }: LandingPageProps) {
 
   useEffect(() => {
     // Generate wind streaks being sucked *into* the center portal
-    const newParticles = Array.from({ length: 120 }).map((_, i) => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    const particleCount = isMobile ? 25 : 80;
+
+    const newParticles = Array.from({ length: particleCount }).map((_, i) => {
       const angle = Math.random() * Math.PI * 2;
-      const distance = Math.random() * 80 + 50; // Starts 50vw to 130vw away
+      const distance = Math.random() * 80 + (isMobile ? 30 : 50); // Starts closer on mobile
       const startX = Math.cos(angle) * distance;
       const startY = Math.sin(angle) * distance;
       const rotation = angle * (180 / Math.PI); // Aligns streak with the radius
