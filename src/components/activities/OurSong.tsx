@@ -38,7 +38,21 @@ export default function OurSong({ data, onNext, isLast }: { data: DoorData; onNe
           style={{ background: 'rgba(255,255,255,0.95)', borderRadius: 16, padding: '30px 25px', maxWidth: 380, boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
           <p style={{ fontSize: '2rem', marginBottom: 10 }}>🎵</p>
           <h2 style={{ fontFamily: 'Caveat, cursive', fontSize: '1.8rem', color: '#333', marginBottom: 12 }}>{data.title}</h2>
-          <p style={{ fontSize: '1rem', color: '#555', lineHeight: 1.6 }}>{data.message}</p>
+          <p style={{ fontSize: '1rem', color: '#555', lineHeight: 1.6, marginBottom: 20 }}>{data.message}</p>
+          
+          <div style={{ marginBottom: 20 }}>
+            <iframe 
+              style={{ borderRadius: '12px' }} 
+              src="https://open.spotify.com/embed/track/2GzjIHQ87BF2zgbmmthZzO?utm_source=generator&theme=0" 
+              width="100%" 
+              height="152" 
+              frameBorder="0" 
+              allowFullScreen={false} 
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+              loading="lazy"
+            ></iframe>
+          </div>
+
           <UnlockButton onUnlock={onNext} isLast={isLast} />
         </motion.div>
       )}
