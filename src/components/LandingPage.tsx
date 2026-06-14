@@ -10,7 +10,7 @@ interface LandingPageProps {
 export default function LandingPage({ onStart }: LandingPageProps) {
   const [isZooming, setIsZooming] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [particles, setParticles] = useState<{ id: number; x: number; y: number; size: number; duration: number; delay: number }[]>([]);
+  const [particles, setParticles] = useState<{ id: number; startX: number; startY: number; rotation: number; size: number; duration: number; delay: number }[]>([]);
 
   useEffect(() => {
     // Generate wind streaks being sucked *into* the center portal
