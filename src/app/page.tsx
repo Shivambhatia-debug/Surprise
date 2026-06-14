@@ -28,7 +28,7 @@ export default function Home() {
           {/* Replace this URL with your specific Spotify track or playlist embed URL */}
           <iframe 
             style={{ borderRadius: '12px' }} 
-            src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO?utm_source=generator&theme=0" 
+            src="https://open.spotify.com/embed/track/2R5iTxkCln6NLTw6l0kjWw?utm_source=generator&theme=0" 
             width="300" 
             height="80" 
             frameBorder="0" 
